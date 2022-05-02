@@ -1,0 +1,24 @@
+[
+    {
+      "erc725Identities": {
+        "gnosis": "0x123",
+        "polygon": "0x123",
+        "ethereum": ""
+      }
+    },
+    {
+      "erc725Identities": {
+        "gnosis": "0x123",
+        "polygon": "",
+        "ethereum": ""
+      }
+    },
+    {
+        "erc725Identities": {
+          "gnosis": "",
+          "polygon": "0x123",
+          "ethereum": ""
+        }
+      }
+  ]
+  

@@ -1,0 +1,20 @@
+{
+  "name": "ot-node-withdraw-tokens",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ledgerhq/hw-app-eth": "^6.28.1",
+    "@ledgerhq/hw-transport-node-hid": "^6.27.1",
+    "axios": "^0.27.2",
+    "big-number": "^2.0.0",
+    "ethereumjs-tx": "^2.1.2",
+    "web3": "^1.7.3"
+  }
+}
