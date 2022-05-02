@@ -4,15 +4,31 @@ import BigNumber from "big-number";
 import { requireJson } from "./utils.mjs";
 import Profile from "./src/profile.mjs";
 import ProfileStorage from "./src/profileStorage.mjs";
-import Blockchain from "./src/blockchain.mjs";
 import Logger from "./src/logger.mjs";
+import HotWallet from "./src/hotWallet.mjs";
+import Ledger from "./src/ledger.mjs";
 
 const config = requireJson("./config.json");
 const wallets = requireJson("./wallets.json");
-const transport = await TransportNodeHid.default.create();
-const eth = new Eth.default(transport);
-const bip32path = config.managementWallet.bip32path;
-const managementWallet = (await eth.getAddress(bip32path)).address;
+let eth = null;
+let bip32path = null;
+let managementWallet = null;
+if (config.managementWallet.ledger && config.managementWallet.ledger.enabled) {
+  const transport = await TransportNodeHid.default.create();
+  eth = new Eth.default(transport);
+  bip32path = config.managementWallet.ledger.bip32path;
+  managementWallet = (await eth.getAddress(bip32path)).address;
+} else if (
+  config.managementWallet.hotWallet &&
+  config.managementWallet.hotWallet.enabled
+) {
+  managementWallet = config.managementWallet.hotWallet.publicKey;
+} else {
+  throw new Error(
+    'No management wallet enabled. Please enable it in "config.json"'
+  );
+}
+
 const logger = new Logger();
 
 (async () => {
@@ -23,13 +39,26 @@ const logger = new Logger();
       if (identity === "" || config.blockchain[blockchainName].rpc === "")
         continue;
 
-      const blockchain = new Blockchain({
-        ...config.blockchain[blockchainName],
-        blockchainName,
-        managementWallet,
-        eth,
-        bip32path,
-      });
+      let blockchain = null;
+      if (
+        config.managementWallet.ledger &&
+        config.managementWallet.ledger.enabled
+      ) {
+        blockchain = new Ledger({
+          ...config.blockchain[blockchainName],
+          blockchainName,
+          managementWallet,
+          eth,
+          bip32path,
+        });
+      } else {
+        blockchain = new HotWallet({
+          ...config.blockchain[blockchainName],
+          blockchainName,
+          managementWallet,
+          privateKey: config.managementWallet.hotWallet.privateKey,
+        });
+      }
 
       const profileStorage = new ProfileStorage({
         rpc: blockchain.rpc,

@@ -51,12 +51,20 @@ class Blockchain {
 
     if (currentBalance.lt(totalPriceBN)) {
       throw Error(
-        `balance (${currentBalance.toString()}) ${this.ticker} lower than transaction cost (${totalPriceBN.toString()}) ${this.ticker}.`
+        `balance (${currentBalance.toString()}) ${
+          this.ticker
+        } lower than transaction cost (${totalPriceBN.toString()}) ${
+          this.ticker
+        }.`
       );
     }
     if (currentBalance.lt(requiredAmount)) {
       console.log(
-        `      balance running low! Your balance: ${currentBalance.toString()} ${this.ticker}, while minimum required is: ${requiredAmount.toString()} ${this.ticker}`
+        `      balance running low! Your balance: ${currentBalance.toString()} ${
+          this.ticker
+        }, while minimum required is: ${requiredAmount.toString()} ${
+          this.ticker
+        }`
       );
     }
     console.log(
@@ -95,26 +103,7 @@ class Blockchain {
   }
 
   async prepareSignedTransaction(txData) {
-    let transaction = TX.FeeMarketEIP1559Transaction.fromTxData(txData);
-    transaction = transaction.getMessageToSign(false);
-    const resolution = await ledgerService.default.resolveTransaction(
-      transaction,
-      {},
-      { nft: false, externalPlugins: false, erc20: false }
-    );
-    const { v, r, s } = await this.eth.signTransaction(
-      this.bip32path,
-      transaction,
-      resolution
-    );
-    const tx = {
-      ...txData,
-      v: Buffer.from(v, "hex"),
-      r: Buffer.from(r, "hex"),
-      s: Buffer.from(s, "hex"),
-    };
-    const signedTx = TX.FeeMarketEIP1559Transaction.fromTxData(tx);
-    return `0x${signedTx.serialize().toString("hex")}`;
+    return true;
   }
 
   async sendTransaction(contract, address, method, args) {

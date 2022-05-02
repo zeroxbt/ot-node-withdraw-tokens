@@ -1,8 +1,16 @@
 {
   "managementWallet": {
-    "bip32path": "m/44'/60'/0'/0"
+    "ledger": {
+      "enabled": true,
+      "bip32path": "m/44'/60'/0'/0"
+    },
+    "hotWallet": {
+      "enabled": false,
+      "publicKey": "",
+      "privateKey": ""
+    }
   },
-  "minimumWithdrawalAmount": 10,
+  "minimumWithdrawalAmount": 2,
   "blockchain": {
     "polygon": {
       "chainId": 137,
