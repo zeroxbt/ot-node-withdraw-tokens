@@ -12,7 +12,7 @@ Create a wallets.json file with the parameters specified in wallets-example.json
 
 (optional) Set minimumWithdrawalAmount in config.json to withdraw only if available tokens are above a certain threshold (default is 10)
 
-Set managementWallet bip32path in config.json. This path is used to derive the wallet keys with which the transactions will be signed. You can find the path in the Ledger Live app : accounts -> select account -> wrench icon -> advanced -> value of "freshAddressPath"
+Set managementWallet bip32path in config.json. This path is used to derive the wallet keys with which the transactions will be signed. You can find the path in the Ledger Live app : accounts -> select management wallet account -> wrench icon -> advanced -> value of "freshAddressPath"
 
 Add RPCs in config.json. There are a few free rpcs that don't require making accounts :
 
