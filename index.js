@@ -13,25 +13,26 @@ const wallets = requireJson("./wallets.json");
 let eth = null;
 let bip32path = null;
 let managementWallet = null;
-if (config.managementWallet.ledger && config.managementWallet.ledger.enabled) {
-  const transport = await TransportNodeHid.default.create();
-  eth = new Eth.default(transport);
-  bip32path = config.managementWallet.ledger.bip32path;
-  managementWallet = (await eth.getAddress(bip32path)).address;
-} else if (
-  config.managementWallet.hotWallet &&
-  config.managementWallet.hotWallet.enabled
-) {
-  managementWallet = config.managementWallet.hotWallet.publicKey;
-} else {
-  throw new Error(
-    'No management wallet enabled. Please enable it in "config.json"'
-  );
-}
 
 const logger = new Logger();
 
 (async () => {
+  if (config.managementWallet.ledger && config.managementWallet.ledger.enabled) {
+    const transport = await TransportNodeHid.default.create();
+    eth = new Eth.default(transport);
+    bip32path = config.managementWallet.ledger.bip32path;
+    managementWallet = (await eth.getAddress(bip32path)).address;
+  } else if (
+    config.managementWallet.hotWallet &&
+    config.managementWallet.hotWallet.enabled
+  ) {
+    managementWallet = config.managementWallet.hotWallet.publicKey;
+  } else {
+    throw new Error(
+      'No management wallet enabled. Please enable it in "config.json"'
+    );
+  }
+  
   for (const nodeIndex in wallets) {
     const node = wallets[nodeIndex];
     for (const blockchainName of Object.keys(node.erc725Identities)) {
